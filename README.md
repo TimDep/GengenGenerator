@@ -1,4 +1,5 @@
-FYI I didn't change anything about the generation itself. Just made it very easy to generate multiple and with compact information.
+[!NOTE]
+I didn't change anything about the generation itself. Just made it very easy to generate multiple and with compact information.
 
 # Usage
 Install node.js
