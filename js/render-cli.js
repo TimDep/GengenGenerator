@@ -43,7 +43,7 @@ function renderSolutionString(kenken) {
 function renderGroupIDs(groups) {
     var groupString = ""
     for (var i = 0; i < groups.length; i++) {
-        groupString += groups[i]
+        groupString += groups[i]+"/";
     }
     return groupString
 }

@@ -5,7 +5,7 @@ const {renderKenkenToConsole, csvOutput} = require('./js/render-cli');
 program
     .version('1.0.0')
     .option('-s, --size <number>', 'Size of the KenKen puzzle', parseInt)
-    .option('-o, --operations <items>', 'Operations to use (comma-separated)', (val) => val.split(','))
+    .option('-o, --operations <items>', 'Operations to use, comma-seperated: addition, subtraction, multiplication, division, max, min, range, mod, avg, par, gcd', (val) => val.split(','))
     .option('-d, --difficulty <number>', 'Difficulty level', parseInt)
     .option('-m, --max-group-size <number>', 'Maximum group size', parseInt)
     .option('-t, --torus', 'Use torus board')
@@ -40,6 +40,9 @@ const mergedOptions = {
 };
 
 function generateKenkenFromConsole(settings) {
+    if (settings.csv) {
+        console.log('GroupIDs,Operations-Numbers,Solution');
+    }
     for (let i = 0; i < settings.amount; i++) {
         const myKenken = generateKenken(settings);
         if (!settings.csv) {
@@ -48,7 +51,7 @@ function generateKenkenFromConsole(settings) {
         else{
             csvOutput(myKenken)
         }
-        settings.seed = new Date().getTime();
+        settings.seed = Date.now() + performance.now();
     }
 }
 

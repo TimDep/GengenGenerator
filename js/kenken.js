@@ -1,5 +1,6 @@
 const {SingleCell} = require("./operations");
-const{ Addition, Subtraction, Multiplication, Division} = require("./operations");
+const{ Addition, Subtraction, Multiplication, Division, Minimum, Maximum, Range
+, Mod, Average, Parity, Gcd} = require("./operations");
 const {MersenneTwister} = require("./mersenne-twister");
 module.exports = { generateKenken };
 function generateKenken (settings) {
@@ -31,6 +32,28 @@ function Kenken(settings) {
 	if(settings.operations.division) {
 		this.operations.push(new Division())
 	}
+	if(settings.operations.max) {
+		this.operations.push(new Maximum())
+	}
+	if(settings.operations.min) {
+		this.operations.push(new Minimum())
+	}
+	if(settings.operations.range) {
+		this.operations.push(new Range())
+	}
+	if(settings.operations.mod) {
+		this.operations.push(new Mod())
+	}
+	if(settings.operations.avg) {
+		this.operations.push(new Average())
+	}
+	if(settings.operations.par) {
+		this.operations.push(new Parity())
+	}
+	if(settings.operations.gcd) {
+		this.operations.push(new Gcd())
+	}
+
 
 	//Determine if the default maxGroupSize needs to be made smaller due to the operations selected
 	for(var i = 0; i < this.operations.length; i++) {
