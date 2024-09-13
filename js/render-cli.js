@@ -55,7 +55,6 @@ function renderOperations(operations, csv) {
         var operation = operations[i].toString().replace(/;/g, "");
         if (csv) {
             operationString += operation + "/";
-
         }
         else{
             operationString += operation + ",";

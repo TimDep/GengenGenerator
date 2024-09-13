@@ -17,12 +17,12 @@ const options = program.opts();
 
 const defaultOptions = {
     size: 5,
-    operations: [
-        'addition',
-        'subtraction',
-        'multiplication',
-        'division'
-    ],
+    operations: {
+        addition: true,
+        subtraction: true,
+        multiplication: true,
+        division: true
+    },
     difficulty: 1,
     maxGroupSize: 4,
     torus: false,
@@ -35,11 +35,17 @@ const mergedOptions = {
     ...defaultOptions,
     ...options,
     operations: options.operations
-        ? Object.fromEntries(defaultOptions.operations.map(op => [op, options.operations.includes(op)]))
+        ? Object.fromEntries(
+            Object.keys(defaultOptions.operations).map(op => [
+                op,
+                options.operations.includes(op)
+            ])
+        )
         : defaultOptions.operations
 };
 
 function generateKenkenFromConsole(settings) {
+    console.log(settings.operations)
     if (settings.csv) {
         console.log('GroupIDs,Operations-Numbers,Solution');
     }
@@ -47,8 +53,7 @@ function generateKenkenFromConsole(settings) {
         const myKenken = generateKenken(settings);
         if (!settings.csv) {
             renderKenkenToConsole(myKenken);
-        }
-        else{
+        } else {
             csvOutput(myKenken)
         }
         settings.seed = Date.now() + performance.now();
