@@ -45,7 +45,6 @@ const mergedOptions = {
 };
 
 function generateKenkenFromConsole(settings) {
-    console.log(settings.operations)
     if (settings.csv) {
         console.log('GroupIDs,Operations-Numbers,Solution');
     }
