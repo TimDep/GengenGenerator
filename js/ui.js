@@ -2,7 +2,7 @@ $(function () {
 	var defaultOptions = {
 		size: 5
 	}, currentKenken
-	
+
 	if (location.hash) {
 		try{
 			defaultOptions = decodeOptions(location.hash.substr(1))
@@ -14,7 +14,7 @@ $(function () {
 	{
 		renderBlank(defaultOptions.size)
 	}
-	
+
 	$("#size").spinner({
 		spin: function (event, ui) {
 			renderBlank(ui.value)
@@ -22,21 +22,21 @@ $(function () {
 		min: 2,
 		max: 20
 	})
-	
+
 	$("#groupSize").spinner({
 		min: 2,
 		max: 8
 	})
-	
+
 	$("#difficulty").spinner({
 		min: 1,
 		max: 5
 	})
-	
+
 	$("#addition").attr("checked", true)
 	$("#multiplication").attr("checked", true)
 	$("[type=checkbox]").button()
-	
+
 	$("#generate").button().on("click", function (){
 		currentKenken = generateKenken({
 			size: $("#size").spinner("value"),
@@ -58,7 +58,7 @@ $(function () {
 			torus: $("#torus").is(":checked")
 		})
 	})
-	
+
 	$("#solve").button().on("click", function () {
 		renderSolution(currentKenken)
 	})

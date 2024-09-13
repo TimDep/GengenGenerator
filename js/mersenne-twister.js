@@ -68,36 +68,36 @@
 var MersenneTwister = function(seed) {
   if (seed == undefined) {
     seed = new Date().getTime();
-  } 
-  /* Period parameters */  
+  }
+  /* Period parameters */
   this.N = 624;
   this.M = 397;
   this.MATRIX_A = 0x9908b0df;   /* constant vector a */
   this.UPPER_MASK = 0x80000000; /* most significant w-r bits */
   this.LOWER_MASK = 0x7fffffff; /* least significant r bits */
- 
+
   this.mt = new Array(this.N); /* the array for the state vector */
   this.mti=this.N+1; /* mti==N+1 means mt[N] is not initialized */
 
   this.init_genrand(seed);
-}  
- 
+}
+
 /* initializes mt[N] with a seed */
 MersenneTwister.prototype.init_genrand = function(s) {
   this.mt[0] = s >>> 0;
   for (this.mti=1; this.mti<this.N; this.mti++) {
-      var s = this.mt[this.mti-1] ^ (this.mt[this.mti-1] >>> 30);
-   this.mt[this.mti] = (((((s & 0xffff0000) >>> 16) * 1812433253) << 16) + (s & 0x0000ffff) * 1812433253)
-  + this.mti;
-      /* See Knuth TAOCP Vol2. 3rd Ed. P.106 for multiplier. */
-      /* In the previous versions, MSBs of the seed affect   */
-      /* only MSBs of the array mt[].                        */
-      /* 2002/01/09 modified by Makoto Matsumoto             */
-      this.mt[this.mti] >>>= 0;
-      /* for >32 bit machines */
+    var s = this.mt[this.mti-1] ^ (this.mt[this.mti-1] >>> 30);
+    this.mt[this.mti] = (((((s & 0xffff0000) >>> 16) * 1812433253) << 16) + (s & 0x0000ffff) * 1812433253)
+        + this.mti;
+    /* See Knuth TAOCP Vol2. 3rd Ed. P.106 for multiplier. */
+    /* In the previous versions, MSBs of the seed affect   */
+    /* only MSBs of the array mt[].                        */
+    /* 2002/01/09 modified by Makoto Matsumoto             */
+    this.mt[this.mti] >>>= 0;
+    /* for >32 bit machines */
   }
 }
- 
+
 /* initialize by an array with array-length */
 /* init_key is the array for initializing keys */
 /* key_length is its length */
@@ -110,7 +110,7 @@ MersenneTwister.prototype.init_by_array = function(init_key, key_length) {
   for (; k; k--) {
     var s = this.mt[i-1] ^ (this.mt[i-1] >>> 30)
     this.mt[i] = (this.mt[i] ^ (((((s & 0xffff0000) >>> 16) * 1664525) << 16) + ((s & 0x0000ffff) * 1664525)))
-      + init_key[j] + j; /* non linear */
+        + init_key[j] + j; /* non linear */
     this.mt[i] >>>= 0; /* for WORDSIZE > 32 machines */
     i++; j++;
     if (i>=this.N) { this.mt[0] = this.mt[this.N-1]; i=1; }
@@ -119,15 +119,15 @@ MersenneTwister.prototype.init_by_array = function(init_key, key_length) {
   for (k=this.N-1; k; k--) {
     var s = this.mt[i-1] ^ (this.mt[i-1] >>> 30);
     this.mt[i] = (this.mt[i] ^ (((((s & 0xffff0000) >>> 16) * 1566083941) << 16) + (s & 0x0000ffff) * 1566083941))
-      - i; /* non linear */
+        - i; /* non linear */
     this.mt[i] >>>= 0; /* for WORDSIZE > 32 machines */
     i++;
     if (i>=this.N) { this.mt[0] = this.mt[this.N-1]; i=1; }
   }
 
-  this.mt[0] = 0x80000000; /* MSB is 1; assuring non-zero initial array */ 
+  this.mt[0] = 0x80000000; /* MSB is 1; assuring non-zero initial array */
 }
- 
+
 /* generates a random number on [0,0xffffffff]-interval */
 MersenneTwister.prototype.genrand_int32 = function() {
   var y;
@@ -164,34 +164,34 @@ MersenneTwister.prototype.genrand_int32 = function() {
 
   return y >>> 0;
 }
- 
+
 /* generates a random number on [0,0x7fffffff]-interval */
 MersenneTwister.prototype.genrand_int31 = function() {
   return (this.genrand_int32()>>>1);
 }
- 
+
 /* generates a random number on [0,1]-real-interval */
 MersenneTwister.prototype.genrand_real1 = function() {
-  return this.genrand_int32()*(1.0/4294967295.0); 
-  /* divided by 2^32-1 */ 
+  return this.genrand_int32()*(1.0/4294967295.0);
+  /* divided by 2^32-1 */
 }
 
 /* generates a random number on [0,1)-real-interval */
 MersenneTwister.prototype.random = function() {
-  return this.genrand_int32()*(1.0/4294967296.0); 
+  return this.genrand_int32()*(1.0/4294967296.0);
   /* divided by 2^32 */
 }
- 
+
 /* generates a random number on (0,1)-real-interval */
 MersenneTwister.prototype.genrand_real3 = function() {
-  return (this.genrand_int32() + 0.5)*(1.0/4294967296.0); 
+  return (this.genrand_int32() + 0.5)*(1.0/4294967296.0);
   /* divided by 2^32 */
 }
- 
+
 /* generates a random number on [0,1) with 53-bit resolution*/
-MersenneTwister.prototype.genrand_res53 = function() { 
-  var a=this.genrand_int32()>>>5, b=this.genrand_int32()>>>6; 
-  return(a*67108864.0+b)*(1.0/9007199254740992.0); 
-} 
+MersenneTwister.prototype.genrand_res53 = function() {
+  var a=this.genrand_int32()>>>5, b=this.genrand_int32()>>>6;
+  return(a*67108864.0+b)*(1.0/9007199254740992.0);
+}
 
 /* These real versions are due to Isaku Wada, 2002/01/09 added */

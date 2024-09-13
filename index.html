@@ -1,60 +1,46 @@
 <html>
-	<head>
-		<title>Gengen&ndash;a Kenken generator</title>
-		<script src="js/jquery-3.1.1.min.js"></script>
-		<script src="js/jquery-ui.min.js"></script>
-		<script src="js/mersenne-twister.js"></script>
-		<script src="js/encode.js"></script>
-		<script src="js/operations.js"></script>
-		<script src="js/kenken.js"></script>
-		<script src="js/render.js"></script>
-		<link rel="stylesheet" href="css/jquery-ui.min.css" />
-		<link rel="stylesheet" href="css/style.css" />
-		<script src="js/ui.js"></script>
-	</head>
-	<body>
-		<div id="controls" class="no-print">
-			Size: <input id="size" value="5"><br />
-			Difficulty: <input id="difficulty" value="2"><br />
-			Max group size: <input id="groupSize" value="5">
-			<fieldset>
-			  <legend>Allowed operations</legend>
-			  <div id="operations">
-				  <input type="checkbox" name="addition" id="addition">
-				  <label for="addition" checked="checked">+</label>
-				  <input type="checkbox" name="subtraction" id="subtraction">
-				  <label for="subtraction">-</label>
-				  <input type="checkbox" name="multiplication" id="multiplication">
-				  <label for="multiplication">&times;</label>
-				  <input type="checkbox" name="division" id="division">
-				  <label for="division">&divide;</label><br>
-				  <input type="checkbox" name="min" id="min">
-				  <label for="min">Minimum</label>
-				  <input type="checkbox" name="max" id="max">
-				  <label for="max">Maximum</label>
-				  <input type="checkbox" name="range" id="range">
-				  <label for="range">Range</label>
-				  <input type="checkbox" name="mod" id="mod">
-				  <label for="mod">Modulus</label><br>
-				  <input type="checkbox" name="avg" id="avg">
-				  <label for="avg">Average</label>
-				  <input type="checkbox" name="par" id="par">
-				  <label for="par">Parity</label>
-				  <input type="checkbox" name="gcd" id="gcd">
-				  <label for="gcd">GCD</label>
-			  </div>
-			</fieldset>
-			<fieldset>
-			  <legend>Oddities</legend>
-			  <div id="operations">
-				  <input type="checkbox" name="torus" id="torus">
-				  <label for="torus">Torus</label>
-			  </div>
-			</fieldset>
-			<button id="generate">Generate</button>
-			<button id="solve">Solve</button>
+<head>
+	<title>Gengen&ndash;a Kenken generator</title>
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script src="js/jquery-ui.min.js"></script>
+	<script src="js/mersenne-twister.js"></script>
+	<script src="js/encode.js"></script>
+	<script src="js/operations.js"></script>
+	<script src="js/kenken.js"></script>
+	<script src="js/render.js"></script>
+	<link rel="stylesheet" href="css/jquery-ui.min.css" />
+	<link rel="stylesheet" href="css/style.css" />
+	<script src="js/ui.js"></script>
+</head>
+<body>
+<div id="controls" class="no-print">
+	Size: <input id="size" value="5"><br />
+	Difficulty: <input id="difficulty" value="2"><br />
+	Max group size: <input id="groupSize" value="5">
+	<fieldset>
+		<legend>Allowed operations</legend>
+		<div id="operations">
+			<input type="checkbox" name="addition" id="addition">
+			<label for="addition" checked="checked">+</label>
+			<input type="checkbox" name="subtraction" id="subtraction">
+			<label for="subtraction">-</label>
+			<input type="checkbox" name="multiplication" id="multiplication">
+			<label for="multiplication">&times;</label>
+			<input type="checkbox" name="division" id="division">
+			<label for="division">&divide;</label><br>
 		</div>
+	</fieldset>
+	<fieldset>
+		<legend>Oddities</legend>
+		<div id="operations">
+			<input type="checkbox" name="torus" id="torus">
+			<label for="torus">Torus</label>
+		</div>
+	</fieldset>
+	<button id="generate">Generate</button>
+	<button id="solve">Solve</button>
+</div>
 
-		<table id="kenken"></table>
-	</body>
+<table id="kenken"></table>
+</body>
 </html>

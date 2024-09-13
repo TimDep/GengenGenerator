@@ -1,17 +1,17 @@
 function generateKenken (settings) {
 	if (!settings.seed) settings.seed = new Date().getTime()
-    
-    var kenken = new Kenken(settings)
-    renderKenken(kenken)
-    location.hash = encodeOptions(settings)
-    return kenken
+
+	var kenken = new Kenken(settings)
+	renderKenken(kenken)
+	location.hash = encodeOptions(settings)
+	return kenken
 }
 
 // A class for the ken ken board
 function Kenken (settings) {
-    var size = this.size = settings.size
-    this.settings = settings
-    this.board = []
+	var size = this.size = settings.size
+	this.settings = settings
+	this.board = []
 	this.minGroupSize = 1
 	this.defaultMaxGroupSize = settings.maxGroupSize
 	this.maxGroupSize = undefined
@@ -30,28 +30,7 @@ function Kenken (settings) {
 	if(settings.operations.division) {
 		this.operations.push(new Division())
 	}
-	if(settings.operations.max) {
-		this.operations.push(new Maximum())
-	}
-	if(settings.operations.min) {
-		this.operations.push(new Minimum())
-	}
-	if(settings.operations.range) {
-		this.operations.push(new Range())
-	}
-	if(settings.operations.mod) {
-		this.operations.push(new Mod())
-	}
-	if(settings.operations.avg) {
-		this.operations.push(new Average())
-	}
-	if(settings.operations.par) {
-		this.operations.push(new Parity())
-	}
-	if(settings.operations.gcd) {
-		this.operations.push(new Gcd())
-	}
-	
+
 	//Determine if the default maxGroupSize needs to be made smaller due to the operations selected
 	for(var i = 0; i < this.operations.length; i++) {
 		var maxOperationSize = this.operations[i].maxCells
@@ -70,22 +49,22 @@ function Kenken (settings) {
 	if(this.maxGroupSize > this.defaultMaxGroupSize) {
 		this.maxGroupSize = this.defaultMaxGroupSize
 	}
-	
+
 	this.seed = new MersenneTwister(settings.seed)
-	
+
 	var builderArray = shuffledNumberArray(size, this.seed)
-    
-    for (var x = 0; x < size; x++) {
-        this.board[x] = []
-        for (var y = 0; y < size; y++) {
+
+	for (var x = 0; x < size; x++) {
+		this.board[x] = []
+		for (var y = 0; y < size; y++) {
 			// Fills the board with cells, where each row of cells have the values
 			// of the builderArray, cyclically shifted to the left by x (the row number)
-            this.board[x][y] = new Cell(this, builderArray[(x+y)%size])
-        }
-    }
+			this.board[x][y] = new Cell(this, builderArray[(x+y)%size])
+		}
+	}
 	// Shuffle the board
 	shuffleBoard(size,this.board, this.seed)
-	
+
 	// Assign cells in the now shuffled board x and y values
 	for(var x = 0; x < size; x++) {
 		for(var y = 0; y < size; y++) {
@@ -93,7 +72,8 @@ function Kenken (settings) {
 			this.board[x][y].y = y;
 		}
 	}
-	
+	renderBoard(this.board)
+
 	// Create the cell groups
 	var groupID = 1
 	for(var x = 0; x < size; x++) {
@@ -109,11 +89,11 @@ function Kenken (settings) {
 						newCellGroup.grow()
 					}
 				}
-				
+
 				// Shuffle the operations array to get a good spread of the operations, prevents "overshadowing" where having
 				//  + before x picked + more often due to how the algorithm below selects the oepration
 				shuffleInputArray(this.operations,this.seed)
-				
+
 				// Start at the beginning of this now random order operations array
 				var randomOperationStart = 0 //Math.floor(this.operations.length*this.seed.random())
 				var randomOperation = randomOperationStart
@@ -137,7 +117,8 @@ function Kenken (settings) {
 
 				// Add the new cell group to the kenken cell group member variable
 				this.cellGroups.push(newCellGroup)
-				
+				renderBoard(this.cellGroups)
+
 				groupID = groupID + 1
 			}
 		}
@@ -156,7 +137,7 @@ function shuffleBoard (size,board,seed) {
 			board[j][column1] = board[j][column2]
 			board[j][column2] = tempCell
 		}
-		
+
 		// Generate two random integers in the range [0,size)
 		var row1 = Math.floor(size*seed.random())
 		var row2 = Math.floor(size*seed.random())
@@ -216,34 +197,34 @@ CellGroup.prototype.grow = function() {
 				return true
 			}
 		}
-		
+
 		// If all the neighbors were invalid, try the next cell in the list
 		cellNum = (cellNum + 1) % this.cells.length
 		if(cellNum == startingCellNumber) {
 			// we have gone through the whole list with no valid neighbors
 			return false
 		}
-		
+
 	}
 }
 
 CellGroup.prototype.getTopLeft = function () {
 	var cells = this.cells, topLeftCell = cells[0]
-	
+
 	for (var i = 1; i < cells.length; i++) {
 		if (cells[i].x <= topLeftCell.x) {
 			if (cells[i].y < topLeftCell.y) topLeftCell = cells[i]
 		}
 	}
-	
+
 	return topLeftCell
 }
 
 // A class for a single cell in the Kenken which houses data on the cell and methods for finding adjacent cells
 function Cell (kenken, value) {
-    this.kenken = kenken
-    this.x = undefined
-    this.y = undefined
+	this.kenken = kenken
+	this.x = undefined
+	this.y = undefined
 	this.cellGroup = undefined
 	this.value = value
 }
@@ -255,48 +236,48 @@ Cell.prototype.setCellGroup = function(cellGroup) {
 
 // Return an array of the cells neighbors
 Cell.prototype.getNeighbors = function () {
-    var neighbors = []
-    
-    if (this.kenken.settings.torus) {
-    	if (this.x > 0) neighbors.push(this.kenken.board[this.x-1][this.y])
-    	else neighbors.push(this.kenken.board[this.kenken.size-1][this.y])
-	    if (this.y > 0) neighbors.push(this.kenken.board[this.x][this.y-1])
-    	else neighbors.push(this.kenken.board[this.x][this.kenken.size-1])
-	    if (this.x < this.kenken.size - 1) neighbors.push(this.kenken.board[this.x+1][this.y])
-    	else neighbors.push(this.kenken.board[0][this.y])
-	    if (this.y < this.kenken.size - 1) neighbors.push(this.kenken.board[this.x][this.y+1])
-    	else neighbors.push(this.kenken.board[this.x][0])
-    }
-    else
-    {
-	    if (this.x > 0) neighbors.push(this.kenken.board[this.x-1][this.y])
-	    if (this.y > 0) neighbors.push(this.kenken.board[this.x][this.y-1])
-	    if (this.x < this.kenken.size - 1) neighbors.push(this.kenken.board[this.x+1][this.y])
-	    if (this.y < this.kenken.size - 1) neighbors.push(this.kenken.board[this.x][this.y+1])
-    }
-    
-    return neighbors
+	var neighbors = []
+
+	if (this.kenken.settings.torus) {
+		if (this.x > 0) neighbors.push(this.kenken.board[this.x-1][this.y])
+		else neighbors.push(this.kenken.board[this.kenken.size-1][this.y])
+		if (this.y > 0) neighbors.push(this.kenken.board[this.x][this.y-1])
+		else neighbors.push(this.kenken.board[this.x][this.kenken.size-1])
+		if (this.x < this.kenken.size - 1) neighbors.push(this.kenken.board[this.x+1][this.y])
+		else neighbors.push(this.kenken.board[0][this.y])
+		if (this.y < this.kenken.size - 1) neighbors.push(this.kenken.board[this.x][this.y+1])
+		else neighbors.push(this.kenken.board[this.x][0])
+	}
+	else
+	{
+		if (this.x > 0) neighbors.push(this.kenken.board[this.x-1][this.y])
+		if (this.y > 0) neighbors.push(this.kenken.board[this.x][this.y-1])
+		if (this.x < this.kenken.size - 1) neighbors.push(this.kenken.board[this.x+1][this.y])
+		if (this.y < this.kenken.size - 1) neighbors.push(this.kenken.board[this.x][this.y+1])
+	}
+
+	return neighbors
 }
 
 // Return an object with the cell's neighbors indexed by relative location
 Cell.prototype.getNeighborsOriented = function () {
-    var neighbors = {}
-    
-    if (this.kenken.settings.torus) {
-    	neighbors.left=this.x > 0 ? this.kenken.board[this.x-1][this.y] : this.kenken.board[this.kenken.size-1][this.y]
-    	neighbors.up = this.y > 0 ? this.kenken.board[this.x][this.y-1] : this.kenken.board[this.x][this.kenken.size-1]
-	    neighbors.right = this.x < this.kenken.size - 1 ? this.kenken.board[this.x+1][this.y] : this.kenken.board[0][this.y]
+	var neighbors = {}
+
+	if (this.kenken.settings.torus) {
+		neighbors.left=this.x > 0 ? this.kenken.board[this.x-1][this.y] : this.kenken.board[this.kenken.size-1][this.y]
+		neighbors.up = this.y > 0 ? this.kenken.board[this.x][this.y-1] : this.kenken.board[this.x][this.kenken.size-1]
+		neighbors.right = this.x < this.kenken.size - 1 ? this.kenken.board[this.x+1][this.y] : this.kenken.board[0][this.y]
 		neighbors.down = this.y < this.kenken.size - 1 ? this.kenken.board[this.x][this.y+1] : this.kenken.board[this.x][0]
-    }
-    else
-    {
-	    if (this.x > 0) neighbors.left = this.kenken.board[this.x-1][this.y]
-	    if (this.y > 0) neighbors.up = this.kenken.board[this.x][this.y-1]
-	    if (this.x < this.kenken.size - 1) neighbors.right = this.kenken.board[this.x+1][this.y]
-	    if (this.y < this.kenken.size - 1) neighbors.down = this.kenken.board[this.x][this.y+1]
-    }
-    
-    return neighbors
+	}
+	else
+	{
+		if (this.x > 0) neighbors.left = this.kenken.board[this.x-1][this.y]
+		if (this.y > 0) neighbors.up = this.kenken.board[this.x][this.y-1]
+		if (this.x < this.kenken.size - 1) neighbors.right = this.kenken.board[this.x+1][this.y]
+		if (this.y < this.kenken.size - 1) neighbors.down = this.kenken.board[this.x][this.y+1]
+	}
+
+	return neighbors
 }
 
 // Function to shuffle an array, using to shuffle operations array.
@@ -307,12 +288,12 @@ function shuffleInputArray(array, seed) {
 		// Generate a random integer in the range [i,n-1]
 		// Since seed.random() generates a number in the range [0,1)
 		var randomNum = Math.floor((array.length-i)*seed.random()+i)
-		
+
 		//swap the array at spots i and randomNum
 		var numToSwap = array[i]
 		array[i] = array[randomNum]
 		array[randomNum] = numToSwap
-    }
+	}
 }
 
 // Function to generate an array with the numbers 1 through n in a random order
@@ -322,9 +303,20 @@ function shuffledNumberArray (n, seed) {
 	for(var i = 0; i < n; i++) {
 		numberArray.push(i+1)
 	}
-	
+
 	shuffleInputArray(numberArray,seed)
-	
+
 	//return then shuffled array
 	return numberArray
+}
+
+function renderBoard(kenken){
+	var kenkenString = ""
+	for (var y = 0; y < kenken.size; y++){
+		for (var x = 0; x < kenken.size; x++){
+			kenkenString += kenken.board[x][y].value
+		}
+
+	}
+	console.log(kenkenString)
 }
