@@ -3,6 +3,8 @@
  * javascript so currently just making a different class for each of them.
  */
 
+module.exports = { SingleCell, Addition, Subtraction, Multiplication, Division};
+
 // The class for no operation, used for a single cell
 function SingleCell() {
 	this.minCells = 1 // Can operate on a minimum of 1 cell

@@ -1,14 +1,15 @@
+const {SingleCell} = require("./operations");
+const{ Addition, Subtraction, Multiplication, Division} = require("./operations");
+const {MersenneTwister} = require("./mersenne-twister");
+module.exports = { generateKenken };
 function generateKenken (settings) {
 	if (!settings.seed) settings.seed = new Date().getTime()
-
 	var kenken = new Kenken(settings)
-	renderKenken(kenken)
-	location.hash = encodeOptions(settings)
 	return kenken
 }
 
 // A class for the ken ken board
-function Kenken (settings) {
+function Kenken(settings) {
 	var size = this.size = settings.size
 	this.settings = settings
 	this.board = []
@@ -72,8 +73,6 @@ function Kenken (settings) {
 			this.board[x][y].y = y;
 		}
 	}
-	renderBoard(this.board)
-
 	// Create the cell groups
 	var groupID = 1
 	for(var x = 0; x < size; x++) {
@@ -117,8 +116,6 @@ function Kenken (settings) {
 
 				// Add the new cell group to the kenken cell group member variable
 				this.cellGroups.push(newCellGroup)
-				renderBoard(this.cellGroups)
-
 				groupID = groupID + 1
 			}
 		}
@@ -308,15 +305,4 @@ function shuffledNumberArray (n, seed) {
 
 	//return then shuffled array
 	return numberArray
-}
-
-function renderBoard(kenken){
-	var kenkenString = ""
-	for (var y = 0; y < kenken.size; y++){
-		for (var x = 0; x < kenken.size; x++){
-			kenkenString += kenken.board[x][y].value
-		}
-
-	}
-	console.log(kenkenString)
 }
