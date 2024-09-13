@@ -4,6 +4,7 @@ function renderKenkenToConsole(kenken){
     console.log("Group ID's: " + renderGroupIDs(groups))
     console.log("Operations: "+ renderOperations(operationsDes, kenken.settings.csv))
     console.log("Solution: " + renderSolutionString(kenken))
+    console.log("Torus: " + isTorus(kenken, kenken.settings.csv))
 }
 
 function csvOutput(kenken){
@@ -12,6 +13,7 @@ function csvOutput(kenken){
     csvString += renderGroupIDs(groups) + ","
     csvString += renderOperations(operationsDes, kenken.settings.csv) +"," //TODO nog iets met csvString doen
     csvString += renderSolutionString(kenken) + ","
+    csvString += isTorus(kenken, kenken.settings.csv)
     console.log(csvString)
 }
 function makeGroupsAndOperations(kenken) {
@@ -63,4 +65,12 @@ function renderOperations(operations, csv) {
     }
     operationString = operationString.slice(0, -1);
     return operationString
+}
+
+function isTorus(kenken, csv) {
+    if (csv) {
+        return kenken.settings.torus ? 1 : 0;
+    }else{
+        return kenken.settings.torus ? "Yes" : "No";
+    }
 }
