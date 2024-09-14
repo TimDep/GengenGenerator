@@ -46,7 +46,7 @@ const mergedOptions = {
 
 function generateKenkenFromConsole(settings) {
     if (settings.csv) {
-        console.log('GroupIDs,Operations-Numbers,Solution');
+        console.log('GroupIDs,Operations-Numbers,Solution, Torus');
     }
     for (let i = 0; i < settings.amount; i++) {
         const myKenken = generateKenken(settings);
