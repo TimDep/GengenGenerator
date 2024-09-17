@@ -5,7 +5,7 @@ const {renderKenkenToConsole, csvOutput} = require('./js/render-cli');
 program
     .version('1.0.0')
     .option('-s, --size <number>', 'Size of the KenKen puzzle, 2 - 20', parseInt)
-    .option('-o, --operations <items>', 'Operations to use, comma-seperated: addition, subtraction, multiplication, division, max, min, range, mod, avg, par, gcd', (val) => val.split(','))
+    .option('-o, --operations <items>', 'Operations to use, comma-seperated without space between them: addition, subtraction, multiplication, division, max, min, range, mod, avg, par, gcd', (val) => val.split(','))
     .option('-d, --difficulty <number>', 'Difficulty level, 1 - 5', parseInt)
     .option('-m, --max-group-size <number>', 'Maximum group size, 2 - 8', parseInt)
     .option('-t, --torus', 'Use torus board')
