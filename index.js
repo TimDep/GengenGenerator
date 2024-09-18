@@ -21,7 +21,14 @@ const defaultOptions = {
         addition: true,
         subtraction: true,
         multiplication: true,
-        division: true
+        division: true,
+        min: false,
+        max: false,
+        range: false,
+        mod: false,
+        avg: false,
+        par: false,
+        gcd: false,
     },
     difficulty: 1,
     maxGroupSize: 4,
@@ -55,7 +62,7 @@ function generateKenkenFromConsole(settings) {
         } else {
             csvOutput(myKenken)
         }
-        settings.seed = Date.now() + performance.now();
+        settings.seed = Date.now() + Math.floor(Math.random() * 1000);
     }
 }
 
